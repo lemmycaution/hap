@@ -1,8 +1,10 @@
-describe Hap do
+require "hap/cli"
+
+describe Hap::CLI do
 
   describe "when i run `hap` command" do
     it "should output help" do
-      HapCLI.start.must_output "HELLO"
+      -> { Hap::CLI.start }.must_output "HAP!"
     end
   end
 
