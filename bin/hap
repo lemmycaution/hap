@@ -1,5 +1,1 @@
 #!/usr/bin/ruby
-
-require 'hap/cli'
-
-Hap::CLI.start

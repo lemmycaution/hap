@@ -1,5 +1,12 @@
 require "hap/version"
 
 module Hap
-  # Your code goes here...
+  class << self
+    def env
+      ENV['RACK_ENV'] ||= "development"
+    end
+    def root
+      File.expand(__FILE__, "../..")
+    end
+  end
 end
