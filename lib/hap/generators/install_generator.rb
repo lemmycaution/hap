@@ -1,13 +1,11 @@
 require 'thor/group'
 require 'thor/actions'
-require 'hap/generators/helper'
 
 module Hap
   module Generators
     class InstallGenerator < Thor::Group
   
       include Thor::Actions
-      include Generators::Helper
       
       argument :name
       
@@ -16,7 +14,7 @@ module Hap
       end
 
       def copy_app_template
-        directory "templates/app" name
+        directory "#{File.dirname(__FILE__)}/templates/app", name
       end
   
     end

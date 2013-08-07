@@ -1,0 +1,3 @@
+<% endpoint[:servers].each_with_index do |server, index| %>
+web: bundle exec ruby <%= endpoint[:source] %> -p <%= server[:port] %>
+<% end %>

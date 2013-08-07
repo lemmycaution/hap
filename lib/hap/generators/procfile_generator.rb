@@ -9,6 +9,7 @@ module Hap
       include Thor::Actions
       include Generators::Helper
       
+      argument :app, default: "frontend"
       class_option :force, default: true
       
       def self.source_root
@@ -16,7 +17,14 @@ module Hap
       end
 
       def create_procfile
-        template "config/Procfile", "tmp/frontend/Procfile"
+        template "config/Procfile.#{app}", "tmp/#{app}/Procfile"
+      end
+      
+      private
+      
+      def endpoints
+        return [] if env == "production"
+        super
       end
   
     end
