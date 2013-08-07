@@ -10,7 +10,7 @@ module Hap
       argument :name
       
       def self.source_root
-        Hap.root
+        File.dirname(__FILE__)
       end
 
       def copy_app_template

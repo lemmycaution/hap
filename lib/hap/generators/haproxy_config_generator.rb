@@ -12,7 +12,7 @@ module Hap
       class_option :force, default: true
       
       def self.source_root
-        Hap.root
+        Dir.pwd
       end
 
       def create_cfg_file

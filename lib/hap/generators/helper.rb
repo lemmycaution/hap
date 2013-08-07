@@ -8,6 +8,10 @@ module Hap
       extend ActiveSupport::Concern
   
       private
+      
+      def config
+        @config ||= YAML::load(File.read("config/hap.yml"))[env]
+      end
 
       def app_name
         @app_name ||= Hap.config["name"].underscore
