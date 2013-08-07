@@ -4,10 +4,10 @@ require 'hap/generators/helper'
 
 module Hap
   module Generators
-    class HaproxyConfigGenerator < Thor::Group
+    class ProcfileGenerator < Thor::Group
   
       include Thor::Actions
-      include Generators::Helper      
+      include Generators::Helper
       
       class_option :force, default: true
       
@@ -15,8 +15,8 @@ module Hap
         Hap.root
       end
 
-      def create_cfg_file
-        template 'config/haproxy.cfg', "tmp/frontend/haproxy.cfg"
+      def create_procfile
+        template "config/Procfile", "tmp/frontend/Procfile"
       end
   
     end

@@ -4,19 +4,19 @@ require 'hap/generators/helper'
 
 module Hap
   module Generators
-    class HaproxyConfigGenerator < Thor::Group
+    class InstallGenerator < Thor::Group
   
       include Thor::Actions
-      include Generators::Helper      
+      include Generators::Helper
       
-      class_option :force, default: true
+      argument :name
       
       def self.source_root
         Hap.root
       end
 
-      def create_cfg_file
-        template 'config/haproxy.cfg', "tmp/frontend/haproxy.cfg"
+      def copy_app_template
+        directory "templates/app" name
       end
   
     end

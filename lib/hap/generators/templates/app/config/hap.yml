@@ -1,0 +1,21 @@
+development:
+  name: HapApp
+  frontend:
+    bind: "5000"
+    haproxy: "haproxy tmp/frontend/haproxy.cfg -d -V"
+  backend:
+    domain: localhost
+    host: "%{domain}"
+    address: 0.0.0.0
+    port: "%{port}"
+    
+production:
+  name: HapApp
+  frontend:
+    bind: "$PORT"
+    haproxy: "./haproxy haproxy.cfg"    
+  backend:
+    domain: herokuapp.com
+    host: "%{address}"
+    address: "%{app_name}_%{name}.%{domain}"
+    port: 80
