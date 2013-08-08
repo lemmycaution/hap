@@ -20,9 +20,9 @@ module Hap
       
       def install_bundle
         if options[:bundle]
-          inside(app_path,verbose: true) do
+          inside(app_path, verbose: true) do
             Bundler.with_clean_env do
-              run "bundle install", verbose: false
+              run "bundle install", capture: true
             end
           end
         end
@@ -30,7 +30,9 @@ module Hap
       
       def init_git
         inside(app_path, verbose: true) do
-          run "git init && git add . && git commit -am 'initial commit'", verbose: false
+          run "git init", capture: true
+          run "git add .", capture: true
+          run "git commit -am 'initial commit'", capture: true
         end
       end
       

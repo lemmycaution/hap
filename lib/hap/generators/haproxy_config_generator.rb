@@ -3,7 +3,7 @@ module Hap
     class HaproxyConfigGenerator < Thor::Group
   
       include Thor::Actions
-      include Helpers::Deploy     
+      include Helpers::Endpoints     
       
       argument :env, default: Hap.env
       class_option :force, default: true

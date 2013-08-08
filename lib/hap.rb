@@ -16,6 +16,7 @@ module Hap
   
   FRONT_END = "frontend"
   BACK_END  = "backend"
+  BUILDPACK_URL = 'https://github.com/kiafaldorius/haproxy-buildpack'
   
   class << self
     
@@ -28,7 +29,7 @@ module Hap
     end
     
     def app_root
-      @app_root ||= find_root_with_flag('server.rb', Dir.pwd)
+      find_root_with_flag('server.rb', Dir.pwd)
     end
     
     # i steal this from rails
@@ -53,7 +54,8 @@ end
 
 require "hap/helpers/heroku"
 require "hap/helpers/user_input"
-require "hap/helpers/deploy"
+require "hap/helpers/endpoints"
+require "hap/helpers/git"
 require 'hap/generators/endpoint_generator'
 require 'hap/generators/haproxy_config_generator'
 require 'hap/generators/install_generator'

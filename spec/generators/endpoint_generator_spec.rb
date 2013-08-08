@@ -14,12 +14,12 @@ describe Hap::Generators::EndpointGenerator do
     
     it "it should create an endpoint with given name" do
       Hap::Generators::EndpointGenerator.start ["my_end_point", "--force"]
-      File.read("endpoints/my_end_point.rb").must_equal File.read("../../spec/fixtures/my_end_point.rb")
+      File.read("#{Hap.app_root}/endpoints/my_end_point.rb").must_equal File.read("../../spec/fixtures/my_end_point.rb")
     end
     
     it "it should respects namespace" do
       Hap::Generators::EndpointGenerator.start ["namespace/my_end_point", "--force"]
-      File.read("endpoints/namespace/my_end_point.rb").must_equal File.read("../../spec/fixtures/namespace_my_end_point.rb")
+      File.read("#{Hap.app_root}/endpoints/namespace/my_end_point.rb").must_equal File.read("../../spec/fixtures/namespace_my_end_point.rb")
     end    
     
   end

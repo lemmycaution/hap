@@ -12,6 +12,20 @@ module Hap
         value
       end
       
+      def set_env_var key,val
+        file = "#{Hap.app_root}/.env"
+        if File.exists?(file)
+          if File.read(file).include?(key)
+            gsub_file file, Regexp.new("#{key}=*.+"), "#{key}=#{val}"
+          else
+            append_file  file, "\n#{key}=#{val}"
+          end
+        else
+          create_file file, "#{key}=#{val}"
+        end
+        ENV[key] = val    
+      end
+      
     end
   end
 end

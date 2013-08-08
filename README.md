@@ -39,6 +39,12 @@ Run it locally, then head to localhost:5000/showmeok (!wow!)
    $ hap server	
 
 Well, to deploy this tiny api you need a heroku account and api key, if you have already, run;
+but first, if you are using multiple heroku accounts deploy may fail, but are you usin heroku:accounts
+then run
+
+		$ hap account YourAccountName
+
+well, we'r ready now, go live, hurray!
 
     $ hap deploy
 
@@ -51,6 +57,12 @@ Good luck
 Drop me a line if you liked or interested in this, @onuruyar at twitter.
 
 ps: Thanks https://github.com/kiafaldorius/ for his buildpack, it rocks!
+
+## Todo
+
+write more tests
+write documentation
+it can be sexier than this!
 
 ## Contributing
 

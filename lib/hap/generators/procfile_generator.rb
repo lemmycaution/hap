@@ -3,7 +3,7 @@ module Hap
     class ProcfileGenerator < Thor::Group
   
       include Thor::Actions
-      include Helpers::Deploy
+      include Helpers::Endpoints
       
       argument :endpoint, default: Hap::FRONT_END
       argument :env, default: Hap.env
@@ -33,7 +33,7 @@ module Hap
       end
       
       def backend
-        endpoints.select{|e| e[:path] == "/#{endpoint}"}[0]
+        endpoints.select{|e| e[:path] == endpoint}[0]
       end
   
     end

@@ -1,18 +1,16 @@
 module Hap
   
-    class CLI < Thor  
+  class CLI < Thor  
       
-      include Hap::Helpers::Heroku              
-      include Hap::Helpers::Deploy    
+    include Hap::Helpers::Heroku              
+    include Hap::Helpers::Endpoints    
+    include Hap::Helpers::Git        
       
-      def self.source_root
-        Hap.app_root
-      end       
-    
-      desc "new [PATH]", "Creates new Hap App"
-      def new(*args)
-        invoke "hap:generators:install_generator"
-      end
+    def self.source_root
+      Hap.app_root
+    end       
+      
+    if File.exists?("#{Hap.app_root}/server.rb")
       
       desc "endpoint [NAME]", "Creates new endpoint"
       def endpoint(*args)
@@ -36,50 +34,70 @@ module Hap
         delete_app endpoint
       end    
       
+      desc "account [HEROKU_ACCOUNT]", "Sets default heroku account if heroku:accounts plugin available"
+      def account(account)
+        if has_accounts = run("heroku plugins | grep accounts")
+          
+          set_env_var "HEROKU_ACCOUNT", account
+        
+          if File.exists? "#{Hap.app_root}/deploy/#{Hap::FRONT_END}"
+            inside("#{Hap.app_root}/deploy/#{Hap::FRONT_END}",verbose: true) do
+              run "heroku accounts:set #{account}"
+            end
+          end
+          Dir.glob("endpoints/**/*").each do |path|  
+            if File.file? path && File.exists?("#{Hap.app_root}/deploy/#{path.gsub(/endpoints|\.rb/,"")}")
+              inside("#{Hap.app_root}/deploy/#{path.gsub(/endpoints|\.rb/,"")}",verbose: true) do
+                run "heroku accounts:set #{account}"
+              end        
+            end
+          end
+        end           
+      end
+      
       desc "deploy", "Deploys to heroku" 
       def deploy(*args)
         old_env = Hap.env
         Hap.env = "production"
         
-        invoke :create, [Hap::FRONT_END]
-        invoke "hap:generators:procfile_generator", [Hap::FRONT_END]
-        invoke "hap:generators:haproxy_config_generator", ["production"]
-        inside "deploy/#{Hap::FRONT_END}" do
-          Bundler.with_clean_env do
-            run "bundle install", verbose: false
-          end
-          run "git add ."
-          run "git commit -am 'Auto deploy at #{Time.now}'"
-          run "git push #{Hap::FRONT_END} master --force"
-
-        end
+        create_app Hap::FRONT_END
+        Hap::Generators::ProcfileGenerator.start [Hap::FRONT_END, "production"]
+        Hap::Generators::HaproxyConfigGenerator.start ["production"]
+        bundle_and_git Hap::FRONT_END
         
-        endpoints(false).each do |endpoint|
-          klass = endpoint[:path][1..-1]
+        endpoints.each do |endpoint|
+          
+          create_app endpoint[:path]
+          
           filename = File.basename(endpoint[:source])
-          invoke :create, [klass]
-          invoke "hap:generators:procfile_generator", [klass, "production"]                    
-          copy_file endpoint[:source], "deploy/#{klass}/#{filename}"
-          copy_file "config/Gemfile.backend", "deploy/#{klass}/Gemfile"
-          inside "deploy/#{klass}" do
-            Bundler.with_clean_env do
-              run "bundle install", verbose: false
-            end
-            run "git add ."
-            run "git commit -am 'Auto deploy at #{Time.now}'"
-            run "git push #{klass} master --force"
-          end
+          
+          Hap::Generators::ProcfileGenerator.start [endpoint[:path], "production"]
+          
+          copy_file "endpoints/#{endpoint[:path]}.rb", "deploy/#{endpoint[:path]}/#{filename}"
+          copy_file "config/Gemfile.backend", "deploy/#{endpoint[:path]}/Gemfile"
+          
+          bundle_and_git endpoint[:path]
+          
         end
         
         Hap.env = old_env
       end
       
-      private
+    else
       
-      def env
-        Hap.env
-      end     
-
+      desc "new [PATH]", "Creates new Hap App"
+      def new(*args)
+        invoke "hap:generators:install_generator"
+      end
+      
     end
+      
+    private
+      
+    def env
+      Hap.env
+    end     
+
+  end
 
 end
