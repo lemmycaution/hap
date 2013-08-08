@@ -1,13 +1,13 @@
 require 'thor/group'
 require 'thor/actions'
-require 'hap/generators/helper'
+require 'hap/generators/helpers/config_helper'
 
 module Hap
   module Generators
     class HaproxyConfigGenerator < Thor::Group
   
       include Thor::Actions
-      include Generators::Helper      
+      include Generators::Helpers::ConfigHelper     
       
       class_option :force, default: true
       

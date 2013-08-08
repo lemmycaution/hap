@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
 
+require 'hap'
 require 'hap/cli'
 Hap::CLI.start

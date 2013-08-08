@@ -1,21 +1,42 @@
-development:
+development: &development
   name: HapApp
   frontend:
     bind: "5000"
-    haproxy: "haproxy tmp/frontend/haproxy.cfg -d -V"
+    haproxy: "haproxy -f tmp/frontend/haproxy.cfg -d -V"
   backend:
     domain: localhost
     host: "%{domain}"
     address: 0.0.0.0
     port: "%{port}"
+  heroku:
+    user: "%{user}"
+    password: "%{password}"
+
+test:
+  name: HapApp
+  frontend:
+    bind: "5000"
+    haproxy: "haproxy -f tmp/frontend/haproxy.cfg -d -V"
+  backend:
+    domain: localhost
+    host: "%{domain}"
+    address: 0.0.0.0
+    port: "%{port}"
+  heroku:
+    user: "%{user}"
+    password: "%{password}"
     
 production:
   name: HapApp
   frontend:
     bind: "$PORT"
-    haproxy: "./haproxy haproxy.cfg"    
+    haproxy: "./haproxy -f haproxy.cfg"    
   backend:
     domain: herokuapp.com
     host: "%{address}"
     address: "%{app_name}_%{name}.%{domain}"
     port: 80
+  heroku:
+    user: "%{user}"
+    password: "%{password}"
+

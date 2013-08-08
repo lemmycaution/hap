@@ -1,13 +1,13 @@
 require 'thor/group'
 require 'thor/actions'
-require 'hap/generators/helper'
+require 'hap/generators/helpers/config_helper'
 
 module Hap
   module Generators
     class ProcfileGenerator < Thor::Group
   
       include Thor::Actions
-      include Generators::Helper
+      include Generators::Helpers::ConfigHelper
       
       argument :app, default: "frontend"
       class_option :force, default: true
@@ -23,7 +23,7 @@ module Hap
       private
       
       def endpoints
-        return [] if env == "production"
+        return [] if Hap.env == "production"
         super
       end
   

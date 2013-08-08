@@ -24,7 +24,7 @@ task :test, [:path] do |t, args|
       require f 
     }
   else
-    require "hap/#{ARGV[1]}"    
+    require "#{ARGV[1].gsub("spec/","hap/")}"    
     require "#{ARGV[1]}_spec.rb"
   end
 end
