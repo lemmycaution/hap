@@ -20,7 +20,6 @@ module Hap
       private
       
       def type
-        puts "ENDPOINT #{endpoint} #{Hap::FRONT_END}"
         endpoint == Hap::FRONT_END ? Hap::FRONT_END : Hap::BACK_END
       end
       
@@ -31,6 +30,10 @@ module Hap
       def endpoints
         return [] if to.production? && endpoint == Hap::FRONT_END
         super
+      end
+      
+      def backend
+        endpoints.select{|e| e[:path] == "/#{endpoint}"}[0]
       end
   
     end

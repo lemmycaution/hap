@@ -15,4 +15,4 @@ end
 # Bundling
 require 'thor'
 require 'hap'
-Hap::CLI.start ARGV
+Hap::CLI.start

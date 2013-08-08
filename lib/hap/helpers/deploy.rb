@@ -5,7 +5,7 @@ module Hap
   
       protected
       
-      def endpoints
+      def endpoints(include_servers = true)
         @endpoints ||= begin
           Array.new.tap{ |endpoints| 
             Dir.glob("endpoints/**/*").each_with_index do |path,index|
@@ -13,11 +13,17 @@ module Hap
                 source = path
                 path = path.gsub(/endpoints|\.rb/,"")
                 name = path.parameterize.underscore
-                servers = [
-                  { address: address(path), port: port(name, index), 
-                    options: 'inter 5000 fastinter 1000 fall 1 weight 50' }
-                ]
-                endpoints << {source: source, path: path, name: name, host: host(path), servers: servers}
+                servers = nil
+                host = nil
+                if include_servers
+                  servers = [
+                    { address: address(path), port: port(name, index), 
+                      options: 'inter 5000 fastinter 1000 fall 1 weight 50',
+                      type: "web" }
+                  ]
+                  host = get_host(path)
+                end
+                endpoints << {source: source, path: path, name: name, host: host, servers: servers}
               end
             end
           }
@@ -34,7 +40,7 @@ module Hap
         @target ||= to.production? ? "deploy" : "tmp"
       end
 
-      def host path
+      def get_host path
         to.production? ? address(path) : "localhost"
       end
 
