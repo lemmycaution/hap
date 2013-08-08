@@ -1,6 +1,6 @@
 require 'goliath'
-<% if has_module? %><% modules.each do |mname| %>
-module <%= mname.classify %>
+<% if has_module? %><% modules.each do |module_name| %>
+module <%= module_name.classify %>
 <% end %><% end %>
 class <%= class_name.classify %> < Goliath::API
   def response(env)

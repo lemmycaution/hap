@@ -1,72 +1,63 @@
-require 'heroku-api'
-require 'oj'
-
 module Hap
   module Helpers
     module Heroku
       
-      extend ActiveSupport::Concern
-    
-      included do        
-        include Helpers::UserInput
-        include Thor::Actions
-      end
-
       protected
       
-      def create_app endpoint
+      def get_env_var_or_ask_user key, desc = nil
+        val = ENV[key] || ask_user(desc || key)        
+        set_env_var(key, val) unless ENV[key]
+      end
+      
+      def api_key
+        get_env_var_or_ask_user "HEROKU_API_KEY", "heroku api key"
+      end
+      
+      def heroku_account
+        get_env_var_or_ask_user "HEROKU_ACCOUNT", "heroku:accounts plugin account name"        
+      end
+      
+      def has_accounts_plugin?
+        run "heroku plugins | grep accounts"
+      end
+      
+      def has_remote_repository?
+        run "git remote show | grep production"
+      end
+      
+      def create_app name
+        
         begin
-          json = "#{app_path}/deploy/#{endpoint}/heroku.json"
-          return if File.exists?(json)
-          @app = heroku_client.post_app(name: nil).body
-          raise "Endpoint has not been created" unless app["id"]
+          
+          @app = App.new name
+          return app if app.exists?
+          
+          app.create! api_key
+          return unless app.exists?
     
-          if endpoint == Hap::FRONT_END
-            heroku_client.put_config_vars(app["name"], {
-              "BUILDPACK_URL" => Hap::BUILDPACK_URL
-              }) 
-          end
-    
-          create_file json do
-            Oj.dump(app)
+          create_file app.file do
+            Oj.dump(app.data)
           end
           
-          inside("#{app_path}/deploy/#{endpoint}",verbose: true) do
-            run "git init" unless File.exists?(".git")
-            run "git remote add #{endpoint} #{app["git_url"]}"   
-            if has_accounts = run("heroku plugins | grep accounts")
-              heroku_account = ENV['HEROKU_ACCOUNT'] ||= ask_user("heroku account")  
-              run "heroku accounts:set #{heroku_account}"          
-            end                                     
+          inside "#{app_path}/#{Hap::DEPLOYMENT_DIR}/#{name}" do
+            git_remote_add app
           end    
+          
         rescue Exception => e
-          heroku_clint.delete_app @app["name"] if @app
-          raise e
+          
+          app.destroy! if app.exists?
+          raise Thor::Error, e.message
+          
         end 
       end
     
-      def delete_app endpoint  
-        data = "#{app_path}/deploy/#{endpoint}/heroku.json"
-        if File.exists?(data)
-          app = Oj.load(File.read(data))
-          heroku_client.delete_app app["name"]
-        end
+      def delete_app name  
+        App.new(name).destroy! api_key
       end
       
       private
       
-      def app_path
-        Dir.pwd
-      end
-      
       def app; @app end
-      
-      def heroku_client
-        api_key = ENV['HEROKU_API_KEY'] || ask_user("heroku api key")        
-        set_env_var("HEROKU_API_KEY", api_key) unless ENV['HEROKU_API_KEY']
-        
-        @heroku_client ||= ::Heroku::API.new(api_key: api_key, :mock => Hap.env.test?)
-      end
     
     end
   end

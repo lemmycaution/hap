@@ -1,11 +1,10 @@
 module Hap
   module Generators
-    class EndpointGenerator < Thor::Group
+    class Endpoint < Thor::Group
   
-      include Thor::Actions
-      include Helpers::Heroku    
+      include Hap::Helpers    
       
-      argument :name
+      argument :name, required: true
       class_option :remote, default: false            
       
       def self.source_root
@@ -13,13 +12,11 @@ module Hap
       end
 
       def copy_endpoint_template
-        template("templates/endpoint.erb", "#{Hap.app_root}/endpoints/#{name}.rb")
+        template("templates/endpoint.erb", "#{Hap.app_root}/#{Hap::ENDPOINTS_DIR}/#{name}.rb")
       end
       
       def create_remote_app
-        if options[:remote]
-          create_app name
-        end
+        create_app name if options[:remote]
       end
       
       private

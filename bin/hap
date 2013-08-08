@@ -7,8 +7,8 @@ $stdout.sync = true
 
 # ENV vars
 if File.exists?(".env")
-  Hash[File.open(".env").read.split("\n").compact.map{|v| v.split("=")}].each do |k,v|
-    ENV[k] = v if k != "RACK_ENV"
+  Hash[File.read(".env").split("\n").compact.map{|v| v.split("=")}].each do |k,v|
+    ENV[k] = v
   end
 end
 

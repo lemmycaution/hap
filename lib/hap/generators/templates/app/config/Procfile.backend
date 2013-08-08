@@ -1,3 +1,0 @@
-<% backend[:servers].each_with_index do |server, index| %>
-<%= server[:type]%>: bundle exec ruby <%= backend[:source] %> -p $PORT
-<% end %>

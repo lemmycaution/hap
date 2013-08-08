@@ -32,7 +32,7 @@ frontend http
     use_backend backend_<%= endpoint[:name] %> if acl_<%= endpoint[:name] %>
     <% end %>
 
-<% endpoints.each do |endpoint| %>
+<% endpoints(true).each do |endpoint| %>
 backend backend_<%= endpoint[:name] %>
     reqirep ^Host: Host:\ <%= endpoint[:host] %>
     <% endpoint[:servers].each_with_index do |server, index| %>

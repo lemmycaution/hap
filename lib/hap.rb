@@ -1,22 +1,24 @@
+require "kernel"
 require 'pathname'
 require "active_support/inflector"
 require "active_support/string_inquirer"
 require "active_support/concern"
-
-require "hap/version"
-
-module ::Kernel
-  def called_from(level=1)
-    arrs = caller((level||1)+1)  or return
-    arrs[0] =~ /:(\d+)(?::in `(.*)')?/ ? [$`, $1.to_i, $2] : nil
-  end
-end
+require 'active_support/autoload'
 
 module Hap
   
-  FRONT_END = "frontend"
-  BACK_END  = "backend"
-  BUILDPACK_URL = 'https://github.com/kiafaldorius/haproxy-buildpack'
+  extend ActiveSupport::Autoload
+  
+  eager_autoload do
+    autoload :App
+    autoload :CLI    
+    autoload :Constants  
+    autoload :Generators      
+    autoload :Helpers              
+    autoload :Version    
+  end
+  
+  include Constants
   
   class << self
     
@@ -31,6 +33,12 @@ module Hap
     def app_root
       find_root_with_flag('server.rb', Dir.pwd)
     end
+    
+    def in_app_dir?
+      File.exists?("#{Hap.app_root}/server.rb")
+    end
+    
+    private
     
     # i steal this from rails
     def find_root_with_flag(flag, default=nil)
@@ -51,13 +59,3 @@ module Hap
   end
   
 end
-
-require "hap/helpers/heroku"
-require "hap/helpers/user_input"
-require "hap/helpers/endpoints"
-require "hap/helpers/git"
-require 'hap/generators/endpoint_generator'
-require 'hap/generators/haproxy_config_generator'
-require 'hap/generators/install_generator'
-require 'hap/generators/procfile_generator'
-require 'hap/cli'

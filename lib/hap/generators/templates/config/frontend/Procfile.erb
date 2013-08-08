@@ -1,0 +1,8 @@
+web: <%= haproxy %>
+<% unless to.production? %>
+<% endpoints(true).each do |endpoint| %>
+<% endpoint[:servers].each_with_index do |server, index| %>
+srv_<%= endpoint[:name] %>_<%= index %>: bundle exec ruby <%= endpoint[:file] %> -p <%= server[:port] %>
+<% end %>
+<% end %>
+<% end %>
