@@ -9,6 +9,7 @@ module Hap
       include Thor::Actions
       include Generators::Helpers::ConfigHelper     
       
+      argument :env, default: Hap.env
       class_option :force, default: true
       
       def self.source_root
@@ -16,7 +17,7 @@ module Hap
       end
 
       def create_cfg_file
-        template 'config/haproxy.cfg', "tmp/frontend/haproxy.cfg"
+        template 'config/haproxy.cfg', "#{target_root_path}/frontend/haproxy.cfg"
       end
   
     end

@@ -25,12 +25,12 @@ module Hap
       end
       
       def rename_app
-        gsub_file "#{Dir.pwd}/#{path}/config/hap.yml", /HapApp/, name.classify
+        gsub_file "#{root_path}/config/hap.yml", /HapApp/, name.classify
       end
       
       def install_bundle
         if options[:bundle]
-          inside("#{Dir.pwd}/#{path}",:verbose => true) do
+          inside(root_path,:verbose => true) do
             Bundler.with_clean_env do
               run "bundle install"
             end
@@ -39,28 +39,14 @@ module Hap
       end
       
       def init_git
-        inside("#{Dir.pwd}/#{path}",:verbose => true) do
+        inside(root_path,:verbose => true) do
           run "git init && git add . && git commit -am 'initial commit'"
         end
       end
       
       def create_remote_front_app
         if options[:remote]
-          @heroku_app = heroku_client.post_app(name: nil, buildpack: "https://github.com/kiafaldorius/haproxy-buildpack").body
-          raise "App has not been created" unless @heroku_app["id"]
-          
-          heroku_client.put_config_vars(@heroku_app["name"], {
-            "BUILDPACK_URL" => 'https://github.com/kiafaldorius/haproxy-buildpack'
-          }) 
-          
-          inside("#{Dir.pwd}/#{path}",:verbose => true) do
-            run "git remote add frontend #{@heroku_app["git_url"]}"
-          end
-          
-          create_file "#{Dir.pwd}/#{path}/db/local/apps/frontend.json" do
-            Oj.dump(@heroku_app)
-          end
-          
+          create_app "frontend", root_path
         end
       end
       
@@ -68,6 +54,10 @@ module Hap
       
       def name
         path.split("/").last
+      end
+      
+      def root_path
+        "#{Dir.pwd}/#{path}"
       end
       
     end

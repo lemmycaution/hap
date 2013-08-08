@@ -13,6 +13,10 @@ module Hap
         def config
           Hap.config
         end
+        
+        def target_root_path
+          env == "production" ? "deploy" : "tmp"
+        end
 
         def app_name
           @app_name ||= config["name"].underscore
@@ -28,10 +32,6 @@ module Hap
 
         def bind
           config["frontend"]["bind"]
-        end
-      
-        def haproxy
-          config["frontend"]["haproxy"]
         end
 
         def host name

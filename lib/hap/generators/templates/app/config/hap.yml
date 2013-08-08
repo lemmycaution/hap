@@ -2,7 +2,6 @@ development: &development
   name: HapApp
   frontend:
     bind: "5000"
-    haproxy: "haproxy -f tmp/frontend/haproxy.cfg -d -V"
   backend:
     domain: localhost
     host: "%{domain}"
@@ -16,7 +15,6 @@ test:
   name: HapApp
   frontend:
     bind: "5000"
-    haproxy: "haproxy -f tmp/frontend/haproxy.cfg -d -V"
   backend:
     domain: localhost
     host: "%{domain}"
@@ -30,7 +28,6 @@ production:
   name: HapApp
   frontend:
     bind: "$PORT"
-    haproxy: "./haproxy -f haproxy.cfg"    
   backend:
     domain: herokuapp.com
     host: "%{address}"
