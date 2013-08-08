@@ -1,16 +1,5 @@
 #!/usr/bin/ruby
-$:.unshift File.dirname( __FILE__ )
-
-# real time stdout
-$stdout.sync = true
-# $stderror.sync = true
-
-# ENV vars
-if File.exists?(".env")
-  Hash[File.read(".env").split("\n").compact.map{|v| v.split("=")}].each do |k,v|
-    ENV[k] = v
-  end
-end
+require File.join(File.dirname(__FILE__), '..', 'env')
 
 # Bundling
 require 'thor'

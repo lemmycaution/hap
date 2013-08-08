@@ -1,22 +1,6 @@
-$:.unshift File.dirname( __FILE__)
+require "./env"
 
-# real time stdout
-$stdout.sync = true
 $stderr.sync = true
-
-require "bundler/gem_tasks"
-
-# ENV vars
-if File.exists?(".env")
-  Hash[File.open(".env").read.split("\n").map{|v| v.split("=")}].each do |k,v|
-    ENV[k] = v if k != "RACK_ENV"
-  end
-end
-
-# Bundling
-require 'bundler'
-Bundler.setup
-Bundler.require
 
 # Test Task
 task :test, [:path] do |t, args|
