@@ -16,7 +16,7 @@ describe Hap::Generators::HaproxyConfigGenerator do
     
     it "it should templates haproxy config based on environment" do
       Hap::Generators::HaproxyConfigGenerator.start
-      File.read("tmp/frontend/haproxy.cfg").must_equal File.read("../../spec/fixtures/haproxy.cfg")
+      File.read("tmp/#{Hap::FRONT_END}/haproxy.cfg").must_equal File.read("../../spec/fixtures/haproxy.cfg")
     end
     
   end

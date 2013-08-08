@@ -1,15 +1,9 @@
-require 'thor/group'
-require 'thor/actions'
-require 'hap/generators/helpers/user_input_helper'
-require 'hap/generators/helpers/heroku_helper'
-
 module Hap
   module Generators
     class EndpointGenerator < Thor::Group
   
       include Thor::Actions
-      include Generators::Helpers::UserInputHelper      
-      include Generators::Helpers::HerokuHelper      
+      include Helpers::Heroku    
       
       argument :name
       class_option :remote, default: false            
@@ -19,12 +13,12 @@ module Hap
       end
 
       def copy_endpoint_template
-        template("#{File.dirname(__FILE__)}/templates/endpoint.erb", "#{Dir.pwd}/endpoints/#{name}.rb")
+        template("templates/endpoint.erb", "#{Hap.app_root}/endpoints/#{name}.rb")
       end
       
-      def create_remote_front_app
+      def create_remote_app
         if options[:remote]
-          create_app name, "#{Dir.pwd}"
+          create_app name
         end
       end
       

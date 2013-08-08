@@ -16,7 +16,7 @@ describe Hap::Generators::ProcfileGenerator do
     
     it "it should creates procfile" do
       Hap::Generators::ProcfileGenerator.start
-      File.read("tmp/frontend/Procfile").must_equal File.read("../../spec/fixtures/Procfile.frontend")
+      File.read("tmp/#{Hap::FRONT_END}/Procfile").must_equal File.read("../../spec/fixtures/Procfile.frontend")
     end
     
   end

@@ -1,5 +1,22 @@
 #!/usr/bin/ruby
+$:.unshift File.dirname( __FILE__ )
+
+# real time stdout
+$stdout.sync = true
+$stderror.sync = true
+
+# ENV vars
+if File.exists?(".env")
+  Hash[File.open(".env").read.split("\n").map{|v| v.split("=")}].each do |k,v|
+    ENV[k] = v if k != "RACK_ENV"
+  end
+end
+
+# Bundling
+require 'bundler'
+Bundler.setup
+Bundler.require
 
 require 'hap'
 require 'hap/cli'
-Hap::CLI.start
+Hap::CLI.start ARGV
