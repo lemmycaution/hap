@@ -5,7 +5,7 @@ module Hap
       include Thor::Actions
       include Helpers::Deploy     
       
-      argument :target, default: Hap.env
+      argument :env, default: Hap.env
       class_option :force, default: true
       
       def self.source_root
@@ -17,7 +17,7 @@ module Hap
       end
       
       def fix_port
-        gsub_file path, "$PORT", "5000" if to.production?
+        gsub_file path, "$PORT", "5000" unless to.production?
       end
       
       def convert_to_profile

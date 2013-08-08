@@ -1,5 +1,3 @@
-require 'hap/cli'
-
 describe Hap::Generators::InstallGenerator do
   
   describe "when i run generator" do

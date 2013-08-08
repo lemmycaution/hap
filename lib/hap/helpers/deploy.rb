@@ -27,11 +27,11 @@ module Hap
       private
       
       def to
-        @to ||= ActiveSupport::StringInquirer.new(target)
+        @to ||= ActiveSupport::StringInquirer.new(env)
       end
         
       def target
-        @target ||= to.production ? "deploy" : "tmp"
+        @target ||= to.production? ? "deploy" : "tmp"
       end
 
       def host path

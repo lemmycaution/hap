@@ -1,5 +1,3 @@
-require 'hap/cli'
-
 describe Hap::Generators::ProcfileGenerator do
   
   describe "when i run generator" do
@@ -15,7 +13,7 @@ describe Hap::Generators::ProcfileGenerator do
     end
     
     it "it should creates procfile" do
-      Hap::Generators::ProcfileGenerator.start
+      Hap::Generators::ProcfileGenerator.start ["frontend"]
       File.read("tmp/#{Hap::FRONT_END}/Procfile").must_equal File.read("../../spec/fixtures/Procfile.frontend")
     end
     

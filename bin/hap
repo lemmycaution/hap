@@ -3,7 +3,7 @@ $:.unshift File.dirname( __FILE__ )
 
 # real time stdout
 $stdout.sync = true
-$stderror.sync = true
+# $stderror.sync = true
 
 # ENV vars
 if File.exists?(".env")
@@ -13,10 +13,6 @@ if File.exists?(".env")
 end
 
 # Bundling
-require 'bundler'
-Bundler.setup
-Bundler.require
-
+require 'thor'
 require 'hap'
-require 'hap/cli'
 Hap::CLI.start ARGV

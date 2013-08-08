@@ -4,9 +4,6 @@ require "active_support/string_inquirer"
 require "active_support/concern"
 
 require "hap/version"
-require "hap/helpers/heroku"
-require "hap/helpers/user_input"
-require "hap/helpers/deploy"
 
 module ::Kernel
   def called_from(level=1)
@@ -18,6 +15,7 @@ end
 module Hap
   
   FRONT_END = "frontend"
+  BACK_END  = "backend"
   
   class << self
     
@@ -52,3 +50,12 @@ module Hap
   end
   
 end
+
+require "hap/helpers/heroku"
+require "hap/helpers/user_input"
+require "hap/helpers/deploy"
+require 'hap/generators/endpoint_generator'
+require 'hap/generators/haproxy_config_generator'
+require 'hap/generators/install_generator'
+require 'hap/generators/procfile_generator'
+require 'hap/cli'

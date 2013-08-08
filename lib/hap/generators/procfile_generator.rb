@@ -5,8 +5,8 @@ module Hap
       include Thor::Actions
       include Helpers::Deploy
       
-      argument :app, default: Hap::FRONT_END
-      argument :target, default: Hap.env
+      argument :endpoint, default: Hap::FRONT_END
+      argument :env, default: Hap.env
       class_option :force, default: true
       
       def self.source_root
@@ -14,13 +14,14 @@ module Hap
       end
 
       def create_procfile
-        template "config/Procfile.#{type}", "#{target}/#{app}/Procfile"
+        template "config/Procfile.#{type}", "#{target}/#{endpoint}/Procfile"
       end
       
       private
       
       def type
-        app != Hap::FRONT_END ? app : Hap::FRONT_END
+        puts "ENDPOINT #{endpoint} #{Hap::FRONT_END}"
+        endpoint == Hap::FRONT_END ? Hap::FRONT_END : Hap::BACK_END
       end
       
       def haproxy
@@ -28,7 +29,7 @@ module Hap
       end
 
       def endpoints
-        return [] if to.production? && app == Hap::FRONT_END
+        return [] if to.production? && endpoint == Hap::FRONT_END
         super
       end
   
