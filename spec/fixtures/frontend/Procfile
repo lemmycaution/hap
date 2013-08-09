@@ -1,0 +1,3 @@
+web: haproxy -f tmp/server/frontend/haproxy.cfg -d -V
+
+

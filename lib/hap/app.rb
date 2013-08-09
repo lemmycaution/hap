@@ -38,7 +38,7 @@ module Hap
     def destroy!(api_key = nil)
       return unless exists?
       self.api_key = api_key
-      heroku.delete_app @data["name"] 
+      heroku.delete_app @data["name"] rescue nil
     end
     
     def api_key= api_key

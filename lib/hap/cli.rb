@@ -32,6 +32,14 @@ module Hap
         delete_app app
       end    
       
+      desc "delete_all", "Deletes All Heroku apps"
+      def delete_all(*args)
+        delete_app Hap::FRONT_END
+        endpoints.each do |endpoint|
+          delete_app endpoint[:path]
+        end
+      end          
+      
       desc "account [HEROKU_ACCOUNT]", "Sets default heroku account if heroku:accounts plugin available"
       def account(account)
         if has_accounts_plugin?

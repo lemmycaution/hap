@@ -51,7 +51,9 @@ module Hap
       end
     
       def delete_app name  
-        App.new(name).destroy! api_key
+        app = App.new(name)
+        app.destroy! api_key
+        remove_file app.file
       end
       
       private
