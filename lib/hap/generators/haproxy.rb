@@ -21,7 +21,7 @@ module Hap
       
       def convert_to_profile
         if to.production?
-          copy_file target_file, path.gsub( File.basename(target_file), "haproxy.cfg" )
+          copy_file target_file, target_file.gsub( File.basename(target_file), "haproxy.cfg" )
           prepend_file target_file do
             "#!/bin/bash\n"
             "cat > haproxy.cfg <<EOF\n"

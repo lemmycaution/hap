@@ -29,7 +29,8 @@ module Hap
       end
       
       def backend
-        endpoints(true).select{|e| e[:path] == app}[0]
+        path = app.is_a?(String) ? app : app.name
+        endpoints(true).select{|e| e[:path] == path }[0]
       end
   
     end

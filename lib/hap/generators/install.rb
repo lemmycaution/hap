@@ -14,15 +14,16 @@ module Hap
 
       def create_app_directory_structure
         directory("templates/app", path)
-        create_empty_dir "#{app_path}/#{Hap::DEPLOYMENT_DIR}"
-        create_empty_dir "#{app_path}/#{Hap::RUNTIME_DIR}"
-        create_empty_dir "#{app_path}/app/endpoints"
-        create_empty_dir "#{app_path}/config"
+        empty_directory "#{app_path}/#{Hap::DEPLOYMENT_DIR}"
+        empty_directory "#{app_path}/#{Hap::RUNTIME_DIR}"
+        empty_directory "#{app_path}/app/endpoints"
+        empty_directory "#{app_path}/config"
+        Hap.app_root = app_path
       end
       
       def install_bundle
         return unless options[:bundle]
-        inside(app_path, verbose: true) do
+        inside(app_path) do
           Bundler.with_clean_env do
             run "bundle install", capture: true
           end

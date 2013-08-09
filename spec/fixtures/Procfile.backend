@@ -1,2 +1,0 @@
-
-web: bundle exec ruby endpoints/my_end_point.rb -p $PORT

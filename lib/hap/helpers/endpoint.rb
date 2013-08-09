@@ -57,11 +57,12 @@ module Hap
         if to.production?
           
           app = App.new(path)
+ 
+          app = create_app path unless app.exists?
+
+          raise Thor::Error, "App could not found" unless app.exists?
           
-          # raise Thor::Error, "App has not been created yet, try $ hap create [APP] or $ hap deploy" unless app.exists?          
-          app.create!(api_key) unless app.exists?
-          
-          app["domain_name"]["domain"]
+          app.data["domain_name"]["domain"]
           
         else
           "0.0.0.0"

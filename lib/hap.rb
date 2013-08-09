@@ -3,7 +3,7 @@ require 'pathname'
 require "active_support/inflector"
 require "active_support/string_inquirer"
 require "active_support/concern"
-require 'active_support/autoload'
+require "active_support/dependencies/autoload"
 
 module Hap
   
@@ -31,8 +31,12 @@ module Hap
     end
     
     def app_root
-      find_root_with_flag('server.rb', Dir.pwd)
+      @app_root ||= find_root_with_flag('server.rb', Dir.pwd)
     end
+    
+    def app_root= app_root
+      @app_root = app_root
+    end    
     
     def in_app_dir?
       File.exists?("#{Hap.app_root}/server.rb")

@@ -10,8 +10,8 @@ module Hap
     
     def initialize name
       @name = name
-      @file = "#{Hap.app_root}/#{Hap::DEPLOYMENT_DIR}/#{name}/heroku.json"
-      @data = Oj.parse(@file) if exists?
+      @file = "#{Hap.app_root}/#{Hap::DEPLOYMENT_DIR}/#{name}/#{Hap::APP_DATA_FILE}"
+      @data = Oj.load(File.read(@file)) if exists?
     end
     
     def exists?
@@ -20,6 +20,11 @@ module Hap
     
     def frontend?
       @name == Hap::FRONT_END
+    end
+    
+    def data
+      @data["domain_name"] = {"domain" => "TEST"} if Hap.env.test?
+      @data
     end
     
     def create!(api_key = nil)
@@ -41,7 +46,7 @@ module Hap
     end
     
     def missing_method(method,*args,&block)
-      return @data.send(method, &args, &block) if @data.respond_to?(method)
+      return @data.send(method, *args, &block) if @data.respond_to?(method)
       super(method,*args,&block)    
     end
     

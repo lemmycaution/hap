@@ -7,6 +7,8 @@ task :test, [:path] do |t, args|
   
   # set environment
   ENV["RACK_ENV"] = "test"
+  ENV['HEROKU_API_KEY']='TEST_API_KEY'
+  ENV['HEROKU_ACCOUNT']='fluxproject'  
   
   require 'hap'
   

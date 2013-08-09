@@ -1,8 +1,8 @@
 module Hap
   module Constants
     
-    DEPLOYMENT_DIR  = ".deploy"
-    RUNTIME_DIR     = ".server"    
+    DEPLOYMENT_DIR  = "tmp/deploy"
+    RUNTIME_DIR     = "tmp/server"    
     ENDPOINTS_DIR   = "app/endpoints"
     
     FRONT_END     = "frontend"
@@ -16,5 +16,6 @@ module Hap
     DEFAULT_TCP_PORT = 80
     
     DEPLOYED_FRONTEND = "#{DEPLOYMENT_DIR}/#{FRONT_END}"
+    APP_DATA_FILE = "heroku.json"
   end
 end
