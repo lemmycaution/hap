@@ -19,7 +19,7 @@ module Hap
       
       desc "endpoint [NAME]", "Creates new endpoint"
       def endpoint(*args)
-        invoke "hap:generators:endpoint"
+        Hap::Generators::Endpoint.start args
       end
 
       desc "create [APP]", "Creates Heroku app"
@@ -56,9 +56,9 @@ module Hap
       
       desc "server", "Starts Hap server"
       def server(*args)
-        invoke "hap:generators:haproxy_config"        
-        invoke "hap:generators:procfile"                
-        system "foreman start -f tmp/#{Hap::FRONT_END}/Procfile -d ."
+        Hap::Generators::Haproxy.start args
+        Hap::Generators::Procfile.start args         
+        system "foreman start -f #{Hap::RUNTIME_DIR}/#{Hap::FRONT_END}/Procfile -d ."
       end 
       
       desc "deploy", "Deploys to heroku" 
@@ -68,6 +68,7 @@ module Hap
         
         # Deploy Frontend
         create_app Hap::FRONT_END
+        
         Hap::Generators::Procfile.start [Hap::FRONT_END, "production"]
         Hap::Generators::Haproxy.start ["production"]
         bundle_and_git Hap::FRONT_END
@@ -82,7 +83,6 @@ module Hap
           
           copy_file endpoint[:file], deploy_dir(endpoint)
 
-          
           bundle_and_git endpoint[:path]
           
         end

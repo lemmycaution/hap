@@ -35,7 +35,7 @@ module Hap
       end
       
       def deploy_dir endpoint
-        endpoint[:file].gsub(Hap::ENDPOINTS_DIR, Hap::DEPLOYMENT_PATH)
+        "#{Hap::DEPLOYMENT_DIR}/#{endpoint[:path]}/#{Hap::ENDPOINTS_DIR}/#{File.basename(endpoint[:file])}"
       end
       
       private
@@ -79,7 +79,7 @@ module Hap
         if ports[name]
           ports[name] += 1
         else
-          ports[name] = ([index,1].max * 1000) + 5000
+          ports[name] = ((index +1) * 1000) + 5000
         end  
       end
 

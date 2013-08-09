@@ -22,10 +22,6 @@ module Hap
         run "heroku plugins | grep accounts", capture: true
       end
       
-      def has_remote_repository?
-        run "git remote show | grep production", capture: true
-      end
-      
       def create_app name
         
         begin
@@ -39,7 +35,7 @@ module Hap
           
           raise Thor::Error, "App could not created" unless @app.exists?          
           
-          inside "#{@app_path}/#{Hap::DEPLOYMENT_DIR}/#{name}" do
+          inside "#{Hap.app_root}/#{Hap::DEPLOYMENT_DIR}/#{name}" do
             git_init
             git_remote_add @app
           end    

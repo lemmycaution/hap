@@ -4,8 +4,6 @@ $:.unshift File.dirname( __FILE__)
 $stdout.sync = true
 # $stderr.sync = true
 
-require "bundler/gem_tasks"
-
 # ENV vars
 if File.exists?(".env")
   Hash[File.read(".env").
@@ -14,8 +12,3 @@ if File.exists?(".env")
     compact.map{|v| v.split("=")}].
     each { |k,v| ENV[k] = v }
 end
-
-# Bundling
-require 'bundler'
-Bundler.setup
-Bundler.require

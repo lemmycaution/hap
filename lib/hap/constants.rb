@@ -4,6 +4,7 @@ module Hap
     DEPLOYMENT_DIR  = "tmp/deploy"
     RUNTIME_DIR     = "tmp/server"    
     ENDPOINTS_DIR   = "app/endpoints"
+    CONFIG_DIR      = "config"
     
     FRONT_END     = "frontend"
     BACK_END      = "backend"
@@ -17,5 +18,6 @@ module Hap
     
     DEPLOYED_FRONTEND = "#{DEPLOYMENT_DIR}/#{FRONT_END}"
     APP_DATA_FILE = "heroku.json"
+    REMOTE_REPO_NAME = "heroku"
   end
 end

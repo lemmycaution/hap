@@ -27,7 +27,7 @@ frontend http
     bind :$PORT
     monitor-uri         /haproxy  # end point to monitor HAProxy status (returns 200)
     
-    <% endpoints.each do |endpoint| %>
+    <% endpoints(true).each do |endpoint| %>
     acl acl_<%= endpoint[:name] %> path_reg ^/<%= endpoint[:path] %>/?
     use_backend backend_<%= endpoint[:name] %> if acl_<%= endpoint[:name] %>
     <% end %>

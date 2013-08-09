@@ -2,6 +2,13 @@ require "./env"
 
 $stderr.sync = true
 
+require "bundler/gem_tasks"
+
+# Bundling
+require 'bundler'
+Bundler.setup
+Bundler.require
+
 # Test Task
 task :test, [:path] do |t, args|
   

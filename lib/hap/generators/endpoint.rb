@@ -15,6 +15,10 @@ module Hap
         template("templates/endpoint.erb", "#{Hap.app_root}/#{Hap::ENDPOINTS_DIR}/#{name}.rb")
       end
       
+      def create_config_file
+        create_file "#{Hap.app_root}/#{Hap::CONFIG_DIR}/#{name}.rb", ""
+      end
+      
       def create_remote_app
         create_app name if options[:remote]
       end
