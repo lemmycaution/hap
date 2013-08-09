@@ -15,7 +15,8 @@ task :test, [:path] do |t, args|
   # set environment
   ENV["RACK_ENV"] = "test"
   ENV['HEROKU_API_KEY']='TEST_API_KEY'
-  ENV['HEROKU_ACCOUNT']='fluxproject'  
+  ENV['HEROKU_ACCOUNT']='fluxproject' 
+  ENV['GEM_ROOT'] = File.dirname(File.expand_path(__FILE__))
   
   require 'hap'
   

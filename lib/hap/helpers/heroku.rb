@@ -22,8 +22,7 @@ module Hap
         run "heroku plugins | grep accounts", capture: true
       end
       
-      def create_app name
-        
+      def create_app name   
         begin
           
           @app = App.new name

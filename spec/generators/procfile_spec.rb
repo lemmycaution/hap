@@ -3,13 +3,13 @@ describe Hap::Generators::Procfile do
   describe "when i run generator" do
     
     before do
-      Hap::CLI.start ["new", "test/testapp", "--force"]      
-      Dir.chdir("test/testapp")
+      Hap::CLI.start ["new", dummy_path, "--force"]      
+      Dir.chdir(dummy_path)
     end
     
     after do
       Dir.chdir("../..")      
-      system "rm -rf test/testapp"
+      system "rm -rf #{dummy_path}"
     end
     
     it "it should creates procfile for Frontend [haproxy]" do
